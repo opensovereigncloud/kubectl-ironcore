@@ -25,6 +25,8 @@ RUN --mount=type=ssh --mount=type=secret,id=github_pat GITHUB_PAT_PATH=/run/secr
 
 # Copy the go source
 COPY main.go main.go
+COPY cmd/ cmd/
+COPY exec/ exec/
 
 # Build
 RUN GOMAXPROCS=1 CGO_ENABLED=1 GOOS=linux GOARCH=${GOARCH:-$(go env GOARCH)} go build -a -o kubectl-onmetal main.go

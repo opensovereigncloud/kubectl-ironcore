@@ -12,33 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package kubectlonmetal
 
 import (
-	"context"
-	"os"
-	"os/signal"
-
-	kubectlonmetal "github.com/onmetal/kubectl-onmetal/cmd/kubectl-onmetal"
-
-	"github.com/go-logr/zapr"
-	"go.uber.org/zap"
+	"github.com/onmetal/kubectl-onmetal/cmd/exec"
+	"github.com/spf13/cobra"
+	"k8s.io/cli-runtime/pkg/genericclioptions"
 )
 
-func main() {
-	zapLog, err := zap.NewDevelopment()
-	if err != nil {
-		panic(err)
+func Command() *cobra.Command {
+	var (
+		configFlags = genericclioptions.NewConfigFlags(true)
+	)
+
+	cmd := &cobra.Command{
+		Use: "kubectl-onmetal",
 	}
-	defer func() { _ = zapLog.Sync() }()
 
-	setupLog := zapr.NewLogger(zapLog)
+	configFlags.AddFlags(cmd.PersistentFlags())
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop()
+	cmd.AddCommand(
+		exec.Command(configFlags),
+	)
 
-	if err := kubectlonmetal.Command().ExecuteContext(ctx); err != nil {
-		setupLog.Error(err, "Error running command")
-		os.Exit(1)
-	}
+	return cmd
 }

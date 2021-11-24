@@ -1,3 +1,6 @@
+# Image URL to use all building/pushing image targets
+IMG ?= kubectl-onmetal:latest
+
 all: check
 
 ##@ General
@@ -46,9 +49,17 @@ check: generate lint addlicense fmt test ## Execute multiple checks.
 
 .PHONY: build
 build: generate fmt ## Build the binary
-	go build -o bin/kubectl-onmetal ./cmd
+	go build -o bin/kubectl-onmetal .
 
 .PHONY: install
 install: build ## Install the binary to /usr/local/bin
 	cp bin/kubectl-onmetal /usr/local/bin
+
+.PHONY: docker-build
+docker-build: test ## Build docker image with the manager.
+	docker build --ssh default=${HOME}/.ssh/id_rsa -t ${IMG} .
+
+.PHONY: docker-push
+docker-push: ## Push docker image with the manager.
+	docker push ${IMG}
 
