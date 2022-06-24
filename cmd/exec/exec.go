@@ -17,32 +17,38 @@ package exec
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"os"
 
-	"github.com/onmetal/kubectl-onmetal/exec"
-	"github.com/onmetal/onmetal-console/tty/os"
-
-	"sigs.k8s.io/controller-runtime/pkg/client"
-
+	onmetalapi "github.com/onmetal/onmetal-api/api"
+	computev1alpha1 "github.com/onmetal/onmetal-api/apis/compute/v1alpha1"
+	onmetalclientset "github.com/onmetal/onmetal-api/generated/clientset/versioned"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"k8s.io/client-go/tools/remotecommand"
+	"k8s.io/kubectl/pkg/util/term"
 
 	"github.com/spf13/cobra"
 )
 
 func Command(restClientGetter genericclioptions.RESTClientGetter) *cobra.Command {
+	var insecureSkipTLSVerifyBackend bool
+
 	cmd := &cobra.Command{
 		Use:  "exec machine-name",
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
 			name := args[0]
-			return Run(ctx, restClientGetter, name)
+			return Run(ctx, restClientGetter, name, insecureSkipTLSVerifyBackend)
 		},
 	}
+
+	cmd.Flags().BoolVar(&insecureSkipTLSVerifyBackend, "insecure-skip-tls-verify-backend", insecureSkipTLSVerifyBackend, "Whether to skip tls verification on the machinepoollet exec backend.")
 
 	return cmd
 }
 
-func Run(ctx context.Context, restClientGetter genericclioptions.RESTClientGetter, name string) error {
+func Run(ctx context.Context, restClientGetter genericclioptions.RESTClientGetter, name string, insecureSkipVerifyTLSBackend bool) error {
 	cfg, err := restClientGetter.ToRESTConfig()
 	if err != nil {
 		return fmt.Errorf("error getting rest config: %w", err)
@@ -53,15 +59,49 @@ func Run(ctx context.Context, restClientGetter genericclioptions.RESTClientGette
 		return fmt.Errorf("error determining target namespace: %w", err)
 	}
 
-	c, err := client.New(cfg, client.Options{})
+	onmetalClientset, err := onmetalclientset.NewForConfig(cfg)
 	if err != nil {
-		return fmt.Errorf("error creating client: %w", err)
+		return err
 	}
 
-	tty, err := os.FromStdStreams()
-	if err != nil {
-		return fmt.Errorf("error creating tty: %w", err)
+	req := onmetalClientset.ComputeV1alpha1().RESTClient().
+		Post().
+		Namespace(namespace).
+		Resource("machines").
+		Name(name).
+		SubResource("exec").
+		VersionedParams(&computev1alpha1.MachineExecOptions{InsecureSkipTLSVerifyBackend: insecureSkipVerifyTLSBackend}, onmetalapi.ParameterCodec)
+
+	var sizeQueue remotecommand.TerminalSizeQueue
+	tty := term.TTY{
+		In:     os.Stdin,
+		Out:    os.Stdout,
+		Raw:    true,
+		TryDev: true,
+	}
+	if size := tty.GetSize(); size != nil {
+		// fake resizing +1 and then back to normal so that attach-detach-reattach will result in the
+		// screen being redrawn
+		sizePlusOne := *size
+		sizePlusOne.Width++
+		sizePlusOne.Height++
+
+		// this call spawns a goroutine to monitor/update the terminal size
+		sizeQueue = tty.MonitorSize(&sizePlusOne, size)
 	}
 
-	return exec.Run(ctx, c, tty, namespace, name)
+	exec, err := remotecommand.NewSPDYExecutor(cfg, http.MethodPost, req.URL())
+	if err != nil {
+		return err
+	}
+
+	_, _ = fmt.Fprintln(os.Stderr, "If you don't see a command prompt, try pressing enter.")
+	return tty.Safe(func() error {
+		return exec.Stream(remotecommand.StreamOptions{
+			Stdin:             tty.In,
+			Stdout:            tty.Out,
+			Tty:               true,
+			TerminalSizeQueue: sizeQueue,
+		})
+	})
 }
