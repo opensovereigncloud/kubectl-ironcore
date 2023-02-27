@@ -19,9 +19,13 @@ import (
 
 	"github.com/onmetal/kubectl-onmetal/cmd/create"
 	"github.com/onmetal/kubectl-onmetal/cmd/exec"
+	"github.com/onmetal/kubectl-onmetal/cmd/generate"
+	"github.com/onmetal/kubectl-onmetal/cmd/options"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"k8s.io/client-go/tools/clientcmd"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	"k8s.io/kubectl/pkg/util/templates"
 )
 
 type Options struct {
@@ -40,17 +44,27 @@ func Command(opts Options) *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use: "kubectl-onmetal",
+		Use:   "kubectl-onmetal",
+		Short: "Command line utility for operating and interacting with onmetal.",
+		Run:   runHelp,
 	}
 
 	configFlags.AddFlags(cmd.PersistentFlags())
 
 	f := cmdutil.NewFactory(configFlags)
 
+	templates.ActsAsRootCommand(cmd, []string{"options"})
+
 	cmd.AddCommand(
 		exec.Command(configFlags),
 		create.Command(f, opts.IOStreams),
+		generate.Command(clientcmd.NewDefaultPathOptions(), opts.IOStreams),
+		options.Command(opts.IOStreams.Out),
 	)
 
 	return cmd
+}
+
+func runHelp(cmd *cobra.Command, _ []string) {
+	_ = cmd.Help()
 }

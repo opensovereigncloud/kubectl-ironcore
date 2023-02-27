@@ -55,8 +55,8 @@ build: generate fmt ## Build the binary
 	go build -o bin/kubectl-onmetal .
 
 .PHONY: install
-install: build ## Install the binary to /usr/local/bin
-	cp bin/kubectl-onmetal /usr/local/bin
+install: generate fmt ## Install the binary to /usr/local/bin
+	go install .
 
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.

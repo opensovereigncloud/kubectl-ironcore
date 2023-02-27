@@ -23,7 +23,8 @@ import (
 
 func Command(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "create",
+		Use:   "create",
+		Short: "Create configuration / items in a cluster.",
 	}
 
 	cmd.AddCommand(

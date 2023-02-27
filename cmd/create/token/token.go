@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/onmetal/kubectl-onmetal/api"
 	"github.com/onmetal/kubectl-onmetal/bootstraptoken"
 	utilbootstraptoken "github.com/onmetal/kubectl-onmetal/utils/bootstraptoken"
 	"github.com/spf13/cobra"
@@ -29,8 +30,6 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
-
-const FieldOwner = client.FieldOwner("api.onmetal.de/kubectl-onmetal")
 
 type Flags struct {
 	Factory    cmdutil.Factory
@@ -123,7 +122,8 @@ func Command(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Comm
 	flags := NewFlags(f, streams)
 
 	cmd := &cobra.Command{
-		Use: "token",
+		Use:   "token",
+		Short: "Create a bootstrap token in a cluster.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts, err := flags.ToOptions(cmd)
 			if err != nil {
@@ -147,7 +147,7 @@ func Run(ctx context.Context, opts Options) error {
 
 	secret := utilbootstraptoken.ToSecret(t)
 
-	patchOpts := []client.PatchOption{client.ForceOwnership, FieldOwner}
+	patchOpts := []client.PatchOption{client.ForceOwnership, api.FieldOwner}
 	if opts.DryRun == cmdutil.DryRunServer {
 		patchOpts = append(patchOpts, client.DryRunAll)
 	}

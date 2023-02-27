@@ -33,8 +33,9 @@ func Command(restClientGetter genericclioptions.RESTClientGetter) *cobra.Command
 	var insecureSkipTLSVerifyBackend bool
 
 	cmd := &cobra.Command{
-		Use:  "exec <machine-name>",
-		Args: cobra.ExactArgs(1),
+		Use:   "exec <machine-name>",
+		Short: "Exec onto running entities in the cluster.",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
 			name := args[0]
