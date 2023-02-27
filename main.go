@@ -19,9 +19,8 @@ import (
 	"os"
 	"os/signal"
 
-	kubectlonmetal "github.com/onmetal/kubectl-onmetal/cmd/kubectl-onmetal"
-
 	"github.com/go-logr/zapr"
+	kubectlonmetal "github.com/onmetal/kubectl-onmetal/cmd/kubectl-onmetal"
 	"go.uber.org/zap"
 )
 
@@ -37,7 +36,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	if err := kubectlonmetal.Command().ExecuteContext(ctx); err != nil {
+	if err := kubectlonmetal.DefaultCommand().ExecuteContext(ctx); err != nil {
 		setupLog.Error(err, "Error running command")
 		os.Exit(1)
 	}

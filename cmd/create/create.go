@@ -1,4 +1,4 @@
-// Copyright 2021 OnMetal authors
+// Copyright 2023 OnMetal authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,27 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kubectlonmetal
+package create
 
 import (
-	"github.com/onmetal/kubectl-onmetal/cmd/exec"
+	"github.com/onmetal/kubectl-onmetal/cmd/create/token"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func Command() *cobra.Command {
-	var (
-		configFlags = genericclioptions.NewConfigFlags(true)
-	)
-
+func Command(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "kubectl-onmetal",
+		Use: "create",
 	}
 
-	configFlags.AddFlags(cmd.PersistentFlags())
-
 	cmd.AddCommand(
-		exec.Command(configFlags),
+		token.Command(f, streams),
 	)
 
 	return cmd

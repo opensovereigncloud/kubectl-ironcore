@@ -23,11 +23,10 @@ import (
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	onmetalapiclientgo "github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	onmetalapiclientgoscheme "github.com/onmetal/onmetal-api/client-go/onmetalapi/scheme"
+	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/remotecommand"
 	"k8s.io/kubectl/pkg/util/term"
-
-	"github.com/spf13/cobra"
 )
 
 func Command(restClientGetter genericclioptions.RESTClientGetter) *cobra.Command {

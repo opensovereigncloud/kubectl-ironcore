@@ -12,7 +12,9 @@ RUN go mod download
 
 # Copy the go source
 COPY main.go main.go
+COPY bootstraptoken/ bootstraptoken/
 COPY cmd/ cmd/
+COPY utils/ utils/
 
 ARG TARGETOS
 ARG TARGETARCH
