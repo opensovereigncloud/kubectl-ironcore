@@ -18,7 +18,6 @@ import (
 type Flags struct {
 	Filename     string
 	NoFlatten    bool
-	NoMinify     bool
 	ConfigAccess clientcmd.ConfigAccess
 	genericclioptions.IOStreams
 }
@@ -32,7 +31,6 @@ func NewFlags(configAccess clientcmd.ConfigAccess, streams genericclioptions.IOS
 
 func (f *Flags) AddFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&f.Filename, "filename", "f", "", "File to read for bootstrap token secret. Specify '-' for using stdin.")
-	cmd.Flags().BoolVar(&f.NoMinify, "no-minify", false, "Whether to skip minification of the resulting kubeconfig.")
 	cmd.Flags().BoolVar(&f.NoFlatten, "no-flatten", false, "Whether to skip flattening of the resulting kubeconfig.")
 }
 
@@ -45,7 +43,6 @@ func (f *Flags) ToOptions() (*Options, error) {
 		Filename:     f.Filename,
 		ConfigAccess: f.ConfigAccess,
 		IOStreams:    f.IOStreams,
-		NoMinify:     f.NoMinify,
 		NoFlatten:    f.NoFlatten,
 	}, nil
 }
@@ -55,7 +52,6 @@ type Options struct {
 	ConfigAccess clientcmd.ConfigAccess
 	Context      string
 	genericclioptions.IOStreams
-	NoMinify  bool
 	NoFlatten bool
 }
 
@@ -103,30 +99,49 @@ func Run(opts Options) error {
 		return fmt.Errorf("error decoding bootstrap token from secret: %w", err)
 	}
 
-	apiCfg, err := opts.ConfigAccess.GetStartingConfig()
+	startingCfg, err := opts.ConfigAccess.GetStartingConfig()
 	if err != nil {
 		return err
 	}
 
+	contextName := startingCfg.CurrentContext
 	if opts.Context != "" {
-		apiCfg.CurrentContext = opts.Context
+		contextName = opts.Context
 	}
-	if apiCfg.CurrentContext == "" {
+	if contextName == "" {
 		return fmt.Errorf("must specify context or current context must exist in kubeconfig")
 	}
-	context, ok := apiCfg.Contexts[apiCfg.CurrentContext]
+
+	context, ok := startingCfg.Contexts[startingCfg.CurrentContext]
 	if !ok {
-		return fmt.Errorf("context %s not found", apiCfg.CurrentContext)
+		return fmt.Errorf("context %s not found", startingCfg.CurrentContext)
 	}
 
-	apiCfg.AuthInfos[context.AuthInfo] = &clientcmdapi.AuthInfo{
-		Token: token.Secret,
+	cluster, ok := startingCfg.Clusters[context.Cluster]
+	if !ok {
+		return fmt.Errorf("cluster %s not found", context.Cluster)
 	}
 
-	if !opts.NoMinify {
-		if err := clientcmdapi.MinifyConfig(apiCfg); err != nil {
-			return err
-		}
+	apiCfg := &clientcmdapi.Config{
+		Preferences: startingCfg.Preferences,
+		Clusters: map[string]*clientcmdapi.Cluster{
+			"bootstrap": cluster,
+		},
+		AuthInfos: map[string]*clientcmdapi.AuthInfo{
+			"bootstrap": {
+				Token: fmt.Sprintf("%s.%s", token.ID, token.Secret),
+			},
+		},
+		Contexts: map[string]*clientcmdapi.Context{
+			"bootstrap": {
+				AuthInfo:   "bootstrap",
+				Cluster:    "bootstrap",
+				Namespace:  context.Namespace,
+				Extensions: context.Extensions,
+			},
+		},
+		CurrentContext: "bootstrap",
+		Extensions:     startingCfg.Extensions,
 	}
 	if !opts.NoFlatten {
 		if err := clientcmdapi.FlattenConfig(apiCfg); err != nil {
