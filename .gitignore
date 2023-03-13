@@ -30,3 +30,5 @@ rootfs.initrd
 rootfs.initramfs
 rootfs.vmlinuz
 
+
+dist/
