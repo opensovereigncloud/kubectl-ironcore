@@ -24,30 +24,35 @@ import (
 type Type string
 
 const (
-	MachinePoolType Type = "MachinePool"
-	VolumePoolType  Type = "VolumePool"
-	BucketPoolType  Type = "BucketPool"
+	MachinePoolType   Type = "MachinePool"
+	VolumePoolType    Type = "VolumePool"
+	BucketPoolType    Type = "BucketPool"
+	NetworkPluginType Type = "NetworkPlugin"
 )
 
 const (
-	MachinePoolBootstrappersGroup = "system:bootstrappers:compute-api-onmetal-de:machinepools"
-	VolumePoolBootstrappersGroup  = "system:bootstrappers:storage-api-onmetal-de:volumepools"
-	BucketPoolBootstrappersGroup  = "system:bootstrappers:storage-api-onmetal-de:bucketpools"
+	MachinePoolBootstrappersGroup   = "system:bootstrappers:compute-api-onmetal-de:machinepools"
+	VolumePoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:volumepools"
+	BucketPoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:bucketpools"
+	NetworkPluginBootstrappersGroup = "system:bootstrappers:networking-api-onmetal-de:networkplugins"
 )
 
 var AvailableTypes = sets.New[Type](
 	MachinePoolType,
 	VolumePoolType,
 	BucketPoolType,
+	NetworkPluginType,
 )
 
 type fields struct {
-	Usages []string
-	Groups []string
+	Description string
+	Usages      []string
+	Groups      []string
 }
 
 var fieldsByType = map[Type]fields{
 	MachinePoolType: {
+		Description: "Bootstrap token for registering machine pools.",
 		Usages: []string{
 			bootstraptoken.UsageSigning,
 			bootstraptoken.UsageAuthentication,
@@ -57,6 +62,7 @@ var fieldsByType = map[Type]fields{
 		},
 	},
 	VolumePoolType: {
+		Description: "Bootstrap token for registering volume pools.",
 		Usages: []string{
 			bootstraptoken.UsageSigning,
 			bootstraptoken.UsageAuthentication,
@@ -66,12 +72,23 @@ var fieldsByType = map[Type]fields{
 		},
 	},
 	BucketPoolType: {
+		Description: "Bootstrap token for registering bucket pools.",
 		Usages: []string{
 			bootstraptoken.UsageSigning,
 			bootstraptoken.UsageAuthentication,
 		},
 		Groups: []string{
 			BucketPoolBootstrappersGroup,
+		},
+	},
+	NetworkPluginType: {
+		Description: "Bootstrap token for registering network plugins.",
+		Usages: []string{
+			bootstraptoken.UsageSigning,
+			bootstraptoken.UsageAuthentication,
+		},
+		Groups: []string{
+			NetworkPluginBootstrappersGroup,
 		},
 	},
 }
@@ -82,14 +99,18 @@ func AddTypeFields(bt *bootstraptoken.BootstrapToken, typ Type) error {
 		return fmt.Errorf("unknown type %q", typ)
 	}
 
-	presentUsages := sets.New(bt.Usages...)
-	presentGroups := sets.New(bt.Groups...)
+	if bt.Description == "" {
+		bt.Description = flds.Description
+	}
 
+	presentUsages := sets.New(bt.Usages...)
 	for _, usage := range flds.Usages {
 		if !presentUsages.Has(usage) {
 			bt.Usages = append(bt.Usages, usage)
 		}
 	}
+
+	presentGroups := sets.New(bt.Groups...)
 	for _, group := range flds.Groups {
 		if !presentGroups.Has(group) {
 			bt.Groups = append(bt.Groups, group)

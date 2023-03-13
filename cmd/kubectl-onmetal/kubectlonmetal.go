@@ -21,6 +21,7 @@ import (
 	"github.com/onmetal/kubectl-onmetal/cmd/exec"
 	"github.com/onmetal/kubectl-onmetal/cmd/generate"
 	"github.com/onmetal/kubectl-onmetal/cmd/options"
+	"github.com/onmetal/kubectl-onmetal/cmd/version"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/clientcmd"
@@ -60,6 +61,7 @@ func Command(opts Options) *cobra.Command {
 		create.Command(f, opts.IOStreams),
 		generate.Command(clientcmd.NewDefaultPathOptions(), opts.IOStreams),
 		options.Command(opts.IOStreams.Out),
+		version.Command(opts.IOStreams.Out),
 	)
 
 	return cmd

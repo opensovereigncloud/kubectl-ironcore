@@ -12,11 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package api
+package version
 
-import "sigs.k8s.io/controller-runtime/pkg/client"
-
-const (
-	// FieldOwner is the field owner kubectl-onmetal uses.
-	FieldOwner = client.FieldOwner("api.onmetal.de/kubectl-onmetal")
+import (
+	"fmt"
+	"io"
+	"os"
+	"runtime/debug"
 )
+
+func Version() string {
+	info, ok := debug.ReadBuildInfo()
+	if !ok || info == nil || info.Main.Version == "" {
+		return "(unknown)"
+	}
+	return info.Main.Version
+}
+
+func FPrint(w io.Writer) {
+	_, _ = fmt.Fprintf(w, "Version: %s\n", Version())
+}
+
+func Print() {
+	FPrint(os.Stdout)
+}

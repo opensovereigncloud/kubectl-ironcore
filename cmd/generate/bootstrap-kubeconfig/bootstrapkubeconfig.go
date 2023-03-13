@@ -1,3 +1,17 @@
+// Copyright 2023 OnMetal authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package bootstrapkubeconfig
 
 import (
@@ -6,6 +20,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/onmetal/kubectl-onmetal/bootstrapkubeconfig"
 	utilbootstraptoken "github.com/onmetal/kubectl-onmetal/utils/bootstraptoken"
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
@@ -104,45 +119,11 @@ func Run(opts Options) error {
 		return err
 	}
 
-	contextName := startingCfg.CurrentContext
-	if opts.Context != "" {
-		contextName = opts.Context
-	}
-	if contextName == "" {
-		return fmt.Errorf("must specify context or current context must exist in kubeconfig")
+	apiCfg, err := bootstrapkubeconfig.Generate(startingCfg, token, bootstrapkubeconfig.WithContext(opts.Context))
+	if err != nil {
+		return fmt.Errorf("error generating bootstrap kubeconfig: %w", err)
 	}
 
-	context, ok := startingCfg.Contexts[startingCfg.CurrentContext]
-	if !ok {
-		return fmt.Errorf("context %s not found", startingCfg.CurrentContext)
-	}
-
-	cluster, ok := startingCfg.Clusters[context.Cluster]
-	if !ok {
-		return fmt.Errorf("cluster %s not found", context.Cluster)
-	}
-
-	apiCfg := &clientcmdapi.Config{
-		Preferences: startingCfg.Preferences,
-		Clusters: map[string]*clientcmdapi.Cluster{
-			"bootstrap": cluster,
-		},
-		AuthInfos: map[string]*clientcmdapi.AuthInfo{
-			"bootstrap": {
-				Token: fmt.Sprintf("%s.%s", token.ID, token.Secret),
-			},
-		},
-		Contexts: map[string]*clientcmdapi.Context{
-			"bootstrap": {
-				AuthInfo:   "bootstrap",
-				Cluster:    "bootstrap",
-				Namespace:  context.Namespace,
-				Extensions: context.Extensions,
-			},
-		},
-		CurrentContext: "bootstrap",
-		Extensions:     startingCfg.Extensions,
-	}
 	if !opts.NoFlatten {
 		if err := clientcmdapi.FlattenConfig(apiCfg); err != nil {
 			return err

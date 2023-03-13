@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/go-logr/zapr v1.2.3
-	github.com/onmetal/onmetal-api v0.0.13-0.20230227114101-d123d1f276f5
+	github.com/onmetal/onmetal-api v0.0.13-0.20230301103927-2800eca6f201
 	github.com/spf13/cobra v1.6.1
 	go.uber.org/zap v1.24.0
 	k8s.io/api v0.26.1

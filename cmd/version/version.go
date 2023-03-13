@@ -12,11 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package api
+package version
 
-import "sigs.k8s.io/controller-runtime/pkg/client"
+import (
+	"io"
 
-const (
-	// FieldOwner is the field owner kubectl-onmetal uses.
-	FieldOwner = client.FieldOwner("api.onmetal.de/kubectl-onmetal")
+	"github.com/onmetal/kubectl-onmetal/version"
+	"github.com/spf13/cobra"
 )
+
+func Command(out io.Writer) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "version",
+		Short: "Prints version information.",
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return Run(out)
+		},
+	}
+
+	return cmd
+}
+
+func Run(out io.Writer) error {
+	version.FPrint(out)
+	return nil
+}
