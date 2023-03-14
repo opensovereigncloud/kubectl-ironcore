@@ -94,7 +94,7 @@ var fieldsByType = map[Type]fields{
 			NetworkPluginBootstrappersGroup,
 		},
 	},
-	APINetletBootstrappersGroup: {
+	APINetletType: {
 		Description: "Bootstrap token for registering apinetlets.",
 		Usages: []string{
 			bootstraptoken.UsageSigning,
