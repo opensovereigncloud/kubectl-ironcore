@@ -28,6 +28,7 @@ const (
 	VolumePoolType    Type = "VolumePool"
 	BucketPoolType    Type = "BucketPool"
 	NetworkPluginType Type = "NetworkPlugin"
+	APINetletType     Type = "APINetlet"
 )
 
 const (
@@ -35,6 +36,7 @@ const (
 	VolumePoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:volumepools"
 	BucketPoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:bucketpools"
 	NetworkPluginBootstrappersGroup = "system:bootstrappers:networking-api-onmetal-de:networkplugins"
+	APINetletBootstrappersGroup     = "system:bootstrappers:apinet-api-onmetal-de:apinetlets"
 )
 
 var AvailableTypes = sets.New[Type](
@@ -42,6 +44,7 @@ var AvailableTypes = sets.New[Type](
 	VolumePoolType,
 	BucketPoolType,
 	NetworkPluginType,
+	APINetletType,
 )
 
 type fields struct {
@@ -89,6 +92,16 @@ var fieldsByType = map[Type]fields{
 		},
 		Groups: []string{
 			NetworkPluginBootstrappersGroup,
+		},
+	},
+	APINetletBootstrappersGroup: {
+		Description: "Bootstrap token for registering apinetlets.",
+		Usages: []string{
+			bootstraptoken.UsageSigning,
+			bootstraptoken.UsageAuthentication,
+		},
+		Groups: []string{
+			APINetletBootstrappersGroup,
 		},
 	},
 }
