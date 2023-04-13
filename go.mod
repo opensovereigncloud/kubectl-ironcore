@@ -11,7 +11,7 @@ require (
 	k8s.io/apimachinery v0.27.0
 	k8s.io/cli-runtime v0.27.0
 	k8s.io/client-go v0.27.0
-	k8s.io/cluster-bootstrap v0.26.3
+	k8s.io/cluster-bootstrap v0.27.0
 	k8s.io/kubectl v0.27.0
 	sigs.k8s.io/controller-runtime v0.14.6
 )
