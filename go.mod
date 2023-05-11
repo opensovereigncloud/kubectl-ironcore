@@ -3,7 +3,7 @@ module github.com/onmetal/kubectl-onmetal
 go 1.20
 
 require (
-	github.com/go-logr/zapr v1.2.3
+	github.com/go-logr/zapr v1.2.4
 	github.com/onmetal/onmetal-api v0.1.1
 	github.com/spf13/cobra v1.7.0
 	go.uber.org/zap v1.24.0
