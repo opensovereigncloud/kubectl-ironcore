@@ -6,7 +6,7 @@ require (
 	github.com/go-logr/zapr v1.2.4
 	github.com/onmetal/onmetal-api v0.1.1
 	github.com/spf13/cobra v1.7.0
-	go.uber.org/zap v1.24.0
+	go.uber.org/zap v1.25.0
 	k8s.io/api v0.27.4
 	k8s.io/apimachinery v0.27.4
 	k8s.io/cli-runtime v0.27.4
@@ -59,8 +59,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/xlab/treeprint v1.1.0 // indirect
 	go.starlark.net v0.0.0-20200306205701-8dd3e2ee1dd5 // indirect
-	go.uber.org/atomic v1.10.0 // indirect
-	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	go4.org/netipx v0.0.0-20220812043211-3cc044ffd68d // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/oauth2 v0.5.0 // indirect
