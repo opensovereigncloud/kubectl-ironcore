@@ -1,4 +1,4 @@
-// Copyright 2023 OnMetal authors
+// Copyright 2023 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package bootstraptoken
 import (
 	"fmt"
 
-	"github.com/onmetal/kubectl-onmetal/utils/bootstraptoken"
+	"github.com/ironcore-dev/kubectl-ironcore/utils/bootstraptoken"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
@@ -33,12 +33,12 @@ const (
 )
 
 const (
-	MachinePoolBootstrappersGroup   = "system:bootstrappers:compute-api-onmetal-de:machinepools"
-	VolumePoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:volumepools"
-	BucketPoolBootstrappersGroup    = "system:bootstrappers:storage-api-onmetal-de:bucketpools"
-	NetworkPluginBootstrappersGroup = "system:bootstrappers:networking-api-onmetal-de:networkplugins"
-	APINetletBootstrappersGroup     = "system:bootstrappers:apinet-api-onmetal-de:apinetlets"
-	MetalnetletBootstrappersGroup   = "system:bootstrappers:apinet-api-onmetal-de:metalnetlets"
+	MachinePoolBootstrappersGroup   = "system:bootstrappers:compute-ironcore-dev:machinepools"
+	VolumePoolBootstrappersGroup    = "system:bootstrappers:storage-ironcore-dev:volumepools"
+	BucketPoolBootstrappersGroup    = "system:bootstrappers:storage-ironcore-dev:bucketpools"
+	NetworkPluginBootstrappersGroup = "system:bootstrappers:networking-ironcore-dev:networkplugins"
+	APINetletBootstrappersGroup     = "system:bootstrappers:apinet-ironcore-dev:apinetlets"
+	MetalnetletBootstrappersGroup   = "system:bootstrappers:apinet-ironcore-dev:metalnetlets"
 )
 
 var AvailableTypes = sets.New[Type](

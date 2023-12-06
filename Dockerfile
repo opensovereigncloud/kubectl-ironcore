@@ -1,4 +1,4 @@
-# Build the kubectl-onmetal binary
+# Build the kubectl-ironcore binary
 FROM golang:1.20 as builder
 
 WORKDIR /workspace
@@ -25,13 +25,13 @@ ARG TARGETARCH
 # Build
 RUN mkdir bin
 
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags="-s -w" -a -o bin/kubectl-onmetal main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags="-s -w" -a -o bin/kubectl-ironcore main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /
-COPY --from=builder /workspace/bin/kubectl-onmetal .
+COPY --from=builder /workspace/bin/kubectl-ironcore .
 USER 65532:65532
 
-ENTRYPOINT ["/kubectl-onmetal"]
+ENTRYPOINT ["/kubectl-ironcore"]

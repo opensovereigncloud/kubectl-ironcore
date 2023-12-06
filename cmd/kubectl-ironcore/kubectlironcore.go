@@ -1,4 +1,4 @@
-// Copyright 2021 OnMetal authors
+// Copyright 2021 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kubectlonmetal
+package kubectlironcore
 
 import (
 	"os"
 
-	"github.com/onmetal/kubectl-onmetal/cmd/create"
-	"github.com/onmetal/kubectl-onmetal/cmd/exec"
-	"github.com/onmetal/kubectl-onmetal/cmd/generate"
-	"github.com/onmetal/kubectl-onmetal/cmd/options"
-	"github.com/onmetal/kubectl-onmetal/cmd/version"
+	"github.com/ironcore-dev/kubectl-ironcore/cmd/create"
+	"github.com/ironcore-dev/kubectl-ironcore/cmd/exec"
+	"github.com/ironcore-dev/kubectl-ironcore/cmd/generate"
+	"github.com/ironcore-dev/kubectl-ironcore/cmd/options"
+	"github.com/ironcore-dev/kubectl-ironcore/cmd/version"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/clientcmd"
@@ -45,8 +45,8 @@ func Command(opts Options) *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "kubectl-onmetal",
-		Short: "Command line utility for operating and interacting with onmetal.",
+		Use:   "kubectl-ironcore",
+		Short: "Command line utility for operating and interacting with ironcore.",
 		Run:   runHelp,
 	}
 

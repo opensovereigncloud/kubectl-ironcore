@@ -1,4 +1,4 @@
-// Copyright 2023 OnMetal authors
+// Copyright 2023 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package version
 import (
 	"io"
 
-	"github.com/onmetal/kubectl-onmetal/version"
+	"github.com/ironcore-dev/kubectl-ironcore/version"
 	"github.com/spf13/cobra"
 )
 

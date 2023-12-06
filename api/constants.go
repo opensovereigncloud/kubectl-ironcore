@@ -1,4 +1,4 @@
-// Copyright 2023 OnMetal authors
+// Copyright 2023 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,6 @@ package api
 import "sigs.k8s.io/controller-runtime/pkg/client"
 
 const (
-	// FieldOwner is the field owner kubectl-onmetal uses.
-	FieldOwner = client.FieldOwner("api.onmetal.de/kubectl-onmetal")
+	// FieldOwner is the field owner kubectl-ironcore uses.
+	FieldOwner = client.FieldOwner("api.ironcore.dev/kubectl-ironcore")
 )

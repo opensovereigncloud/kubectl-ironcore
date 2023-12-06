@@ -1,5 +1,5 @@
 # Image URL to use all building/pushing image targets
-IMG ?= kubectl-onmetal:latest
+IMG ?= kubectl-ironcore:latest
 
 .PHONY: all
 all: check
@@ -29,11 +29,11 @@ fmt: goimports ## Run goimports against code.
 
 .PHONY: add-license
 add-license: addlicense ## Add license headers to all go files.
-	find . -name '*.go' -exec $(ADDLICENSE) -c 'OnMetal authors' {} +
+	find . -name '*.go' -exec $(ADDLICENSE) -c 'IronCore authors' {} +
 
 .PHONY: check-license
 check-license: addlicense ## Check that every file has a license header present.
-	find . -name '*.go' -exec $(ADDLICENSE) -check -c 'OnMetal authors' {} +
+	find . -name '*.go' -exec $(ADDLICENSE) -check -c 'IronCore authors' {} +
 
 .PHONY: generate
 generate: ## Generate code (mocks etc.).
@@ -52,7 +52,7 @@ check: generate add-license fmt lint test ## Execute multiple checks.
 
 .PHONY: build
 build: generate fmt ## Build the binary
-	go build -o bin/kubectl-onmetal .
+	go build -o bin/kubectl-ironcore .
 
 .PHONY: install
 install: generate fmt ## Install the binary to /usr/local/bin
@@ -90,4 +90,3 @@ $(ADDLICENSE): $(LOCALBIN)
 goimports: $(GOIMPORTS) ## Download goimports locally if necessary.
 $(GOIMPORTS): $(LOCALBIN)
 	test -s $(LOCALBIN)/goimports || GOBIN=$(LOCALBIN) go install golang.org/x/tools/cmd/goimports@$(GOIMPORTS_VERSION)
-

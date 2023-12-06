@@ -1,4 +1,4 @@
-// Copyright 2023 OnMetal authors
+// Copyright 2023 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/onmetal/kubectl-onmetal/bootstrapkubeconfig"
-	utilbootstraptoken "github.com/onmetal/kubectl-onmetal/utils/bootstraptoken"
+	"github.com/ironcore-dev/kubectl-ironcore/bootstrapkubeconfig"
+	utilbootstraptoken "github.com/ironcore-dev/kubectl-ironcore/utils/bootstraptoken"
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/yaml"

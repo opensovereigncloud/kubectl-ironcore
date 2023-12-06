@@ -1,4 +1,4 @@
-// Copyright 2021 OnMetal authors
+// Copyright 2021 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import (
 	"os/signal"
 
 	"github.com/go-logr/zapr"
-	kubectlonmetal "github.com/onmetal/kubectl-onmetal/cmd/kubectl-onmetal"
+	kubectlironcore "github.com/ironcore-dev/kubectl-ironcore/cmd/kubectl-ironcore"
 	"go.uber.org/zap"
 )
 
@@ -36,7 +36,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	if err := kubectlonmetal.DefaultCommand().ExecuteContext(ctx); err != nil {
+	if err := kubectlironcore.DefaultCommand().ExecuteContext(ctx); err != nil {
 		setupLog.Error(err, "Error running command")
 		os.Exit(1)
 	}

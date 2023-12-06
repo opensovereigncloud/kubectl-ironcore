@@ -1,4 +1,4 @@
-// Copyright 2021 OnMetal authors
+// Copyright 2021 IronCore authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import (
 	"net/http"
 	"os"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	onmetalapiclientgo "github.com/onmetal/onmetal-api/client-go/onmetalapi"
-	onmetalapiclientgoscheme "github.com/onmetal/onmetal-api/client-go/onmetalapi/scheme"
+	computev1alpha1 "github.com/ironcore-dev/ironcore/api/compute/v1alpha1"
+	ironcoreclientgo "github.com/ironcore-dev/ironcore/client-go/ironcore"
+	ironcoreclientgoscheme "github.com/ironcore-dev/ironcore/client-go/ironcore/scheme"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/remotecommand"
@@ -59,18 +59,18 @@ func Run(ctx context.Context, restClientGetter genericclioptions.RESTClientGette
 		return fmt.Errorf("error determining target namespace: %w", err)
 	}
 
-	onmetalClientset, err := onmetalapiclientgo.NewForConfig(cfg)
+	ironcoreClientset, err := ironcoreclientgo.NewForConfig(cfg)
 	if err != nil {
 		return err
 	}
 
-	req := onmetalClientset.ComputeV1alpha1().RESTClient().
+	req := ironcoreClientset.ComputeV1alpha1().RESTClient().
 		Post().
 		Namespace(namespace).
 		Resource("machines").
 		Name(name).
 		SubResource("exec").
-		VersionedParams(&computev1alpha1.MachineExecOptions{InsecureSkipTLSVerifyBackend: insecureSkipVerifyTLSBackend}, onmetalapiclientgoscheme.ParameterCodec)
+		VersionedParams(&computev1alpha1.MachineExecOptions{InsecureSkipTLSVerifyBackend: insecureSkipVerifyTLSBackend}, ironcoreclientgoscheme.ParameterCodec)
 
 	var sizeQueue remotecommand.TerminalSizeQueue
 	tty := term.TTY{
