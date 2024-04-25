@@ -9,8 +9,8 @@ require (
 	go.uber.org/zap v1.27.0
 	k8s.io/api v0.30.0
 	k8s.io/apimachinery v0.30.0
-	k8s.io/cli-runtime v0.29.4
-	k8s.io/client-go v0.29.4
+	k8s.io/cli-runtime v0.30.0
+	k8s.io/client-go v0.30.0
 	k8s.io/cluster-bootstrap v0.30.0
 	k8s.io/kubectl v0.29.4
 	sigs.k8s.io/controller-runtime v0.17.3
@@ -63,7 +63,7 @@ require (
 	go4.org/netipx v0.0.0-20220812043211-3cc044ffd68d // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.12.0 // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
