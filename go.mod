@@ -7,11 +7,11 @@ require (
 	github.com/ironcore-dev/ironcore v0.1.2-0.20231205221613-fb3dedd1b18b
 	github.com/spf13/cobra v1.8.0
 	go.uber.org/zap v1.27.0
-	k8s.io/api v0.30.0
-	k8s.io/apimachinery v0.30.0
-	k8s.io/cli-runtime v0.30.0
-	k8s.io/client-go v0.30.0
-	k8s.io/cluster-bootstrap v0.30.0
+	k8s.io/api v0.29.4
+	k8s.io/apimachinery v0.29.4
+	k8s.io/cli-runtime v0.29.4
+	k8s.io/client-go v0.29.4
+	k8s.io/cluster-bootstrap v0.29.4
 	k8s.io/kubectl v0.29.4
 	sigs.k8s.io/controller-runtime v0.17.3
 )
