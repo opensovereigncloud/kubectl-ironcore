@@ -1,6 +1,6 @@
 module github.com/ironcore-dev/kubectl-ironcore
 
-go 1.21
+go 1.22.2
 
 require (
 	github.com/go-logr/zapr v1.3.0
@@ -14,11 +14,6 @@ require (
 	k8s.io/cluster-bootstrap v0.29.4
 	k8s.io/kubectl v0.29.4
 	sigs.k8s.io/controller-runtime v0.17.3
-)
-
-require (
-	github.com/google/gnostic-models v0.6.8 // indirect
-	golang.org/x/sync v0.5.0 // indirect
 )
 
 require (
@@ -38,6 +33,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/btree v1.0.1 // indirect
+	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.3.1 // indirect
@@ -67,6 +63,7 @@ require (
 	go4.org/netipx v0.0.0-20220812043211-3cc044ffd68d // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.12.0 // indirect
+	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
