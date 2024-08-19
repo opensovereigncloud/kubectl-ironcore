@@ -1,5 +1,5 @@
 # Build the kubectl-ironcore binary
-FROM --platform=$BUILDPLATFORM golang:1.22 as builder
+FROM --platform=$BUILDPLATFORM golang:1.23 as builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
