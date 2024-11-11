@@ -1,0 +1,12 @@
+team: iaas
+assignees:
+  - "benjamin.alpert"
+cveLabels:
+  - "type::3-cve"
+  - "stream::onMetal"
+  - "Component: API"
+  - "why::Security"
+  - "squad::API"
+dueDays: 13
+cve:
+  - repository: osc/upstream/ironcore-dev/kubectl-ironcore
