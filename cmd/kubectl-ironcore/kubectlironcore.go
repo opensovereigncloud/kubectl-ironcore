@@ -49,8 +49,8 @@ func Command(opts Options) *cobra.Command {
 		exec.Command(configFlags),
 		create.Command(f, opts.IOStreams),
 		generate.Command(clientcmd.NewDefaultPathOptions(), opts.IOStreams),
-		options.Command(opts.IOStreams.Out),
-		version.Command(opts.IOStreams.Out),
+		options.Command(opts.Out),
+		version.Command(opts.Out),
 	)
 
 	return cmd

@@ -80,8 +80,8 @@ GOLANGCI_LINT ?= $(LOCALBIN)/golangci-lint
 
 ## Tool Versions
 ADDLICENSE_VERSION ?= v1.1.1
-GOIMPORTS_VERSION ?= v0.26.0
-GOLANGCI_LINT_VERSION ?= v1.62.2
+GOIMPORTS_VERSION ?= v0.31.0
+GOLANGCI_LINT_VERSION ?= v2.0
 
 .PHONY: addlicense
 addlicense: $(ADDLICENSE) ## Download addlicense locally if necessary.
@@ -96,4 +96,4 @@ $(GOIMPORTS): $(LOCALBIN)
 .PHONY: golangci-lint
 golangci-lint: $(GOLANGCI_LINT) ## Download golangci-lint locally if necessary.
 $(GOLANGCI_LINT): $(LOCALBIN)
-	test -s $(LOCALBIN)/golangci-lint || GOBIN=$(LOCALBIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
+	test -s $(LOCALBIN)/golangci-lint || GOBIN=$(LOCALBIN) go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
