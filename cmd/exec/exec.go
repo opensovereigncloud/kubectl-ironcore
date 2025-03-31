@@ -10,8 +10,8 @@ import (
 	"os"
 
 	computev1alpha1 "github.com/ironcore-dev/ironcore/api/compute/v1alpha1"
-	ironcoreclientgo "github.com/ironcore-dev/ironcore/client-go/ironcore"
-	ironcoreclientgoscheme "github.com/ironcore-dev/ironcore/client-go/ironcore/scheme"
+	ironcore "github.com/ironcore-dev/ironcore/client-go/ironcore/versioned"
+	ironcoreclientgoscheme "github.com/ironcore-dev/ironcore/client-go/ironcore/versioned/scheme"
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/tools/remotecommand"
@@ -48,7 +48,7 @@ func Run(ctx context.Context, restClientGetter genericclioptions.RESTClientGette
 		return fmt.Errorf("error determining target namespace: %w", err)
 	}
 
-	ironcoreClientset, err := ironcoreclientgo.NewForConfig(cfg)
+	ironcoreClientset, err := ironcore.NewForConfig(cfg)
 	if err != nil {
 		return err
 	}
