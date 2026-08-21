@@ -19,6 +19,7 @@ const (
 	NetworkPluginType Type = "NetworkPlugin"
 	APINetletType     Type = "APINetlet"
 	MetalnetletType   Type = "Metalnetlet"
+	PoolLifecycleType Type = "PoolLifecycle"
 )
 
 const (
@@ -28,6 +29,7 @@ const (
 	NetworkPluginBootstrappersGroup = "system:bootstrappers:networking-ironcore-dev:networkplugins"
 	APINetletBootstrappersGroup     = "system:bootstrappers:apinet-ironcore-dev:apinetlets"
 	MetalnetletBootstrappersGroup   = "system:bootstrappers:apinet-ironcore-dev:metalnetlets"
+	PoolLifecycleBootstrappersGroup = "system:bootstrappers:compute-ironcore-dev:poollifecyclecontrollers"
 )
 
 var AvailableTypes = sets.New[Type](
@@ -37,6 +39,7 @@ var AvailableTypes = sets.New[Type](
 	NetworkPluginType,
 	APINetletType,
 	MetalnetletType,
+	PoolLifecycleType,
 )
 
 type fields struct {
@@ -104,6 +107,16 @@ var fieldsByType = map[Type]fields{
 		},
 		Groups: []string{
 			MetalnetletBootstrappersGroup,
+		},
+	},
+	PoolLifecycleType: {
+		Description: "Bootstrap token for registering pool-lifecycle-controllers.",
+		Usages: []string{
+			bootstraptoken.UsageSigning,
+			bootstraptoken.UsageAuthentication,
+		},
+		Groups: []string{
+			PoolLifecycleBootstrappersGroup,
 		},
 	},
 }
