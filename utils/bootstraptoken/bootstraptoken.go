@@ -148,6 +148,10 @@ func ToSecret(token *BootstrapToken) *corev1.Secret {
 	}
 
 	return &corev1.Secret{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: "v1",
+			Kind:       "Secret",
+		},
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: metav1.NamespaceSystem,
 			Name:      util.BootstrapTokenSecretName(token.ID),
